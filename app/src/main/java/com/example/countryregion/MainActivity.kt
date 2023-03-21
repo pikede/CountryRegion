@@ -2,6 +2,7 @@ package com.example.countryregion
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.lifecycle.Observer
@@ -38,6 +39,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private val countriesObserver = Observer<List<CountryResponse>> {
+        hideProgressBar()
         showToastLong(getString(R.string.showing_countries))
         countryAdapter.updateCountryDataset(it)
     }
@@ -47,6 +49,11 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun showToastLong(text: String) {
+        hideProgressBar()
         Toast.makeText(this@MainActivity, text, Toast.LENGTH_LONG).show()
+    }
+
+    private fun hideProgressBar() {
+        binding.lytProgressBar.visibility = View.GONE
     }
 }
