@@ -32,7 +32,6 @@ class CountryAdapter : RecyclerView.Adapter<CountryAdapter.CountryViewHolder>() 
         val countryDiffer = CountryDiffer(countryDataset, newDataset)
         val diffResult = DiffUtil.calculateDiff(countryDiffer)
 
-        Log.d("**logged", "updated")
         countryDataset.clear()
         countryDataset.addAll(newDataset)
         diffResult.dispatchUpdatesTo(this)
@@ -65,7 +64,6 @@ class CountryAdapter : RecyclerView.Adapter<CountryAdapter.CountryViewHolder>() 
         override fun getOldListSize() = oldList.size
 
         override fun getNewListSize() = newList.size
-
 
         override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
             return oldList[oldItemPosition].name == newList[newItemPosition].name
