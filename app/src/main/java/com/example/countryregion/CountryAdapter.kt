@@ -1,9 +1,11 @@
 package com.example.countryregion
 
 import android.graphics.Color
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.LinearLayout
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.countryregion.databinding.CountryItemBinding
 import com.example.countryregion.models.CountryResponse
@@ -27,9 +29,12 @@ class CountryAdapter : RecyclerView.Adapter<CountryAdapter.CountryViewHolder>() 
     override fun getItemCount(): Int = countryDataset.size
 
     fun updateCountryDataset(newDataset: List<CountryResponse>) {
+        val countryDiffer = CountryDiffer(countryDataset, newDataset)
+        val diffResult = DiffUtil.calculateDiff(countryDiffer)
+
         countryDataset.clear()
         countryDataset.addAll(newDataset)
-        notifyDataSetChanged()
+        diffResult.dispatchUpdatesTo(this)
     }
 
     // Used to show different countries as all white is confusing
@@ -48,6 +53,36 @@ class CountryAdapter : RecyclerView.Adapter<CountryAdapter.CountryViewHolder>() 
                 code?.let { itemViewBinding.tvCode.text = it }
                 capital?.let { itemViewBinding.tvCapital.text = it }
             }
+        }
+    }
+
+    class CountryDiffer(
+        private val oldList: List<CountryResponse>,
+        private val newList: List<CountryResponse>
+    ) : DiffUtil.Callback() {
+
+        override fun getOldListSize() = oldList.size
+
+        override fun getNewListSize() = newList.size
+
+        override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
+            return oldList[oldItemPosition].name == newList[newItemPosition].name
+                    && oldList[oldItemPosition].capital == newList[newItemPosition].capital
+                    && oldList[oldItemPosition].region == newList[newItemPosition].region
+                    && oldList[oldItemPosition].currency == newList[newItemPosition].currency
+                    && oldList[oldItemPosition].flag == newList[newItemPosition].flag
+                    && oldList[oldItemPosition].code == newList[newItemPosition].code
+                    && oldList[oldItemPosition].language == newList[newItemPosition].language
+        }
+
+        override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
+            return oldList[oldItemPosition].name == newList[newItemPosition].name
+                    && oldList[oldItemPosition].capital == newList[newItemPosition].capital
+                    && oldList[oldItemPosition].region == newList[newItemPosition].region
+                    && oldList[oldItemPosition].currency == newList[newItemPosition].currency
+                    && oldList[oldItemPosition].flag == newList[newItemPosition].flag
+                    && oldList[oldItemPosition].code == newList[newItemPosition].code
+                    && oldList[oldItemPosition].language == newList[newItemPosition].language
         }
     }
 }
